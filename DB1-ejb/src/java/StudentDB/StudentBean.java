@@ -81,7 +81,7 @@ public class StudentBean {
             resultDB = statement.executeUpdate(sqlQuery);
             if(resultDB == 6)
             System.out.println("6 records are insterted in Student Table");
-            //add to the ArrayList of StudentList
+            //add data
             initialiseStudentList();
         }
          //close connection
