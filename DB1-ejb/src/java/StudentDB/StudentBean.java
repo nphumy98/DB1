@@ -12,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import javax.activation.DataSource;
 import javax.ejb.Stateless;
 import javax.ejb.LocalBean;
 
@@ -86,7 +87,8 @@ public class StudentBean {
          //close connection
         connection.close();
     }
-      
+    
+    
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
     public void addStudent(Student aStudent) throws ClassNotFoundException, SQLException {
@@ -176,7 +178,6 @@ public class StudentBean {
      }
      
      //getter and setter
-
     public ArrayList<Student> getStudentList() {
         return StudentList;
     }

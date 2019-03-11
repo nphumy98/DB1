@@ -4,10 +4,13 @@
  * and open the template in the editor.
  */
 
+import StudentDB.Student;
 import StudentDB.StudentBean;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import javax.ejb.EJB;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -20,6 +23,21 @@ import javax.servlet.http.HttpServletResponse;
 public class StudentDBServlet extends HttpServlet {
     @EJB
     private StudentBean studentBean;
+
+    @Override
+    public void init() throws ServletException {
+        super.init(); //To change body of generated methods, choose Tools | Templates.
+        try
+        {
+            studentBean= new StudentBean();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+    
+    
     
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -34,7 +52,7 @@ public class StudentDBServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+            getStudentListDB(request, response);
     }
 
     /**
@@ -48,5 +66,16 @@ public class StudentDBServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        doGet(request,response);
+    }
+
+    private void getStudentListDB(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        //get StudentList from DB
+        ArrayList<Student> studentList= studentBean.getStudentList();
+        //add StudentList to request
+        request.setAttribute("STUDENT_LIST", studentList);
+        //send to JSP page
+        RequestDispatcher dispatcher= request.getRequestDispatcher("/studentList.jsp");
+        dispatcher.forward(request, response);
     }
 }
