@@ -4,8 +4,9 @@
     Author     : MY PHU NGUYEN
 --%>
 
-<%@page import="java.util.ArrayList"%>
+
 <%@page import="StudentDB.Student"%>
+<%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -42,8 +43,15 @@
             <button type="submit">ADD A STUDENT</button>
         </form>
         <br></br>
-        <form action="viewStudent.jsp">
-            <button type="submit">VIEW STUDENT DB</button>
+        <form>
+            <!--hidden input field to help Servlet controller work-->
+            <input type="hidden" name="userDemand" value="viewStudent" />
+            <select name="studentID">
+                <% for (Student aStudent: studentList) {%>
+                    <option> <%= aStudent.getStudentID()%> </option>
+                <%}%>
+            </select>
+            <button type="submit">SELECT ID TO VIEW</button>
         </form>
     </body>
 </html>

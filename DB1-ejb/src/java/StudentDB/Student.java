@@ -15,6 +15,9 @@ public class Student {
     private String firstName;
     private String lastName;
 
+    public Student() {
+    }
+
     public Student(int studentID, String firstName, String lastName) {
         this.StID = studentID;
         if (StID>studentNumber)
@@ -71,6 +74,5 @@ public class Student {
     public static void setStudentNumber(int studentNumber) {
         Student.studentNumber = studentNumber;
     }
-    
     
 }

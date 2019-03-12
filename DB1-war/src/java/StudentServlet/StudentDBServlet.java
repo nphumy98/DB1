@@ -3,18 +3,23 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+package StudentServlet;
 
 import StudentDB.Student;
 import StudentDB.StudentBean;
+import StudentDB.StudentBeanLocal;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -22,10 +27,9 @@ import javax.servlet.http.HttpSession;
  */
 public class StudentDBServlet extends HttpServlet {
     @EJB
-    private StudentBean studentBean;
-
-
-    @Override
+    private StudentBeanLocal studentBean;
+    
+        @Override
     public void init() throws ServletException {
         super.init(); //To change body of generated methods, choose Tools | Templates.
         try
@@ -53,7 +57,32 @@ public class StudentDBServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-            getStudentListDB(request, response);
+        try {
+            String userDemand= request.getParameter("userDemand");
+            if (userDemand=="null")
+            {
+                userDemand= "startDB";
+            }
+            
+            switch(userDemand)
+            {
+                case "startDB":
+                    this.init();
+                    getStudentListDB(request, response);
+                    break;
+                case "addStudent":
+                    getAddStudent(request,response);
+                    break;
+                case "viewStudent":
+                    viewStudent(request,response);
+                    break;
+                default:
+                    getStudentListDB(request, response);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+       
+        }
     }
 
     /**
@@ -77,6 +106,30 @@ public class StudentDBServlet extends HttpServlet {
         request.setAttribute("STUDENT_LIST", studentList);
         //send to JSP page
         RequestDispatcher dispatcher= request.getRequestDispatcher("/studentList.jsp");
+        dispatcher.forward(request, response);
+    }
+
+    private void getAddStudent(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, ClassNotFoundException, SQLException {
+        //get parameter from user input
+        String firstName= request.getParameter("firstName");
+        String lastName= request.getParameter("lastName");
+        //create new student object
+        Student aStudent= new Student(firstName, lastName);
+        //add student to database
+        studentBean.addStudent(aStudent);
+        //back to main page studentList.jsp (from method getStudentLIstDB)
+        getStudentListDB(request, response);
+    }
+
+    private void viewStudent(HttpServletRequest request, HttpServletResponse response) throws ClassNotFoundException, SQLException, ServletException, IOException {
+        //get parameter from user input
+        int studentID= Integer.parseInt(request.getParameter("studentID"));
+        //get Student from database
+        Student retrieveStudent= studentBean.retrieveStudentInformation(studentID);
+         //add retrieve Student to request
+        request.setAttribute("retrieveStudent", retrieveStudent);
+        //send to JSP page
+        RequestDispatcher dispatcher= request.getRequestDispatcher("/viewStudent.jsp");
         dispatcher.forward(request, response);
     }
 

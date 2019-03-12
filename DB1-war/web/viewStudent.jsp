@@ -4,14 +4,31 @@
     Author     : MY PHU NGUYEN
 --%>
 
+<%@page import="StudentDB.Student"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>View Student</title>
     </head>
+    <% Student retrieveStudent= (Student)request.getAttribute("retrieveStudent");%>
     <body>
-        <h1>Hello World!</h1>
+        <h1>Student's Information</h1>
+        <div>
+            <table>
+                <tr>
+                    <th>Student ID</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                </tr>
+               
+                <tr>
+                    <td> <%= retrieveStudent.getStudentID()%> </td>
+                    <td> <%= retrieveStudent.getFirstName() %> </td>
+                    <td> <%= retrieveStudent.getLastName() %> </td>
+                </tr>
+            </table>
+        </div>
     </body>
 </html>

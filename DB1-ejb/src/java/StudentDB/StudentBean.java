@@ -22,7 +22,7 @@ import javax.ejb.LocalBean;
  */
 @Stateless
 @LocalBean
-public class StudentBean {
+public class StudentBean implements StudentBeanLocal{
 
     private ArrayList<Student> StudentList;
     // The driverURL to contain the Database Driver
@@ -91,6 +91,14 @@ public class StudentBean {
     
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
+
+    /**
+     *
+     * @param aStudent
+     * @throws ClassNotFoundException
+     * @throws SQLException
+     */
+        @Override
     public void addStudent(Student aStudent) throws ClassNotFoundException, SQLException {
         this.StudentList.add(aStudent);
          //Create Connection
@@ -119,8 +127,10 @@ public class StudentBean {
         connection.close();
     }
     
+    @Override
     public Student retrieveStudentInformation(int studentID) throws ClassNotFoundException, SQLException
     {
+        Student aStudent=null;
         //Create Connection
         Connection connection= connectDatabaseSchema();
         // Creating the SQL Statement
@@ -128,14 +138,17 @@ public class StudentBean {
         String sqlQuery = "SELECT * FROM "+tableName+" WHERE StID="+studentID;
         ResultSet resultSet = statement.executeQuery(sqlQuery);
         // Step 7: Reading data from the ResultSet
-        while(resultSet.next()){
-            System.out.println(resultSet.getString(1) + "\t"
-                    + resultSet.getString(2) + "\t"
-                    + resultSet.getString(3));
+        if (resultSet.next())
+        {
+            int strID= resultSet.getInt("StID");
+            String firstName= resultSet.getString("firstName");
+            String lastName= resultSet.getString("lastName");
+            //make object to return
+            aStudent= new Student(strID, firstName, lastName);
         }
         //close connection
         connection.close();
-        return null;
+        return aStudent;
     }
     
     //this method is to check if the table Student already exist in the database
