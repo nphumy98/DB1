@@ -30,5 +30,7 @@
                 </tr>
             </table>
         </div>
+        
+        <p><a href="http://localhost:8080/DB1-war/SessionTest?userDemand=startDB">Back to Student List</a></p>
     </body>
 </html>
